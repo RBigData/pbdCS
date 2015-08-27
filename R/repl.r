@@ -1,4 +1,9 @@
-### Global data
+### For R CMD check
+utils::globalVariables(c("continuation", "lasterror", "visible", "should_exit", "pbd_prompt_active", "ret", "lasterror"))
+
+
+#' State management for the pbdR Client/Server
+#' 
 #' @export
 pbdenv <- new.env()
 
@@ -351,7 +356,7 @@ pbd_eval <- function(input, whoami, env)
         if (!ret$visible)
           set.status(ret, NULL)
         else
-          set.status(ret, capture.output(ret$value))
+          set.status(ret, utils::capture.output(ret$value))
       }
       
       send.socket(pbdenv$socket, pbdenv$status)
@@ -408,7 +413,7 @@ pbd_repl_init <- function()
   else if (pbdenv$whoami == "remote")
   {
     ### Order very much matters!
-    suppressPackageStartupMessages(library(pbdMPI))
+###    suppressPackageStartupMessages(library(pbdMPI))
     
     if (pbdenv$debug)
     {
@@ -530,9 +535,13 @@ pbd_repl <- function(env=sys.parent())
 #' the servers to the local R session behind the client.
 #' 
 #' @param object 
-#' 
+#' A remote R object.
 #' @param newname
-#' 
+#' The name the object should take when it becomes local. If left blank,
+#' the local name will have the original (remote) object's name.
+#' @param env
+#' The environment into which the assignment will take place. The
+#' default is the global environment.
 #' 
 #' @examples
 #' \dontrun{
@@ -554,7 +563,7 @@ pbd_repl <- function(env=sys.parent())
 #' }
 #' 
 #' @export
-pbd_localize <- function(object, newname)
+pbd_localize <- function(object, newname, env=.GlobalEnv)
 {
   err <- ".__pbd_localize_failure"
   
@@ -572,7 +581,7 @@ pbd_localize <- function(object, newname)
     if (!missing(newname))
       name <- newname
     
-    assign(x=name, value=value, envir=.GlobalEnv)
+    assign(x=name, value=value, envir=env)
     
     ret <- TRUE
   }
