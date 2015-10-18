@@ -37,8 +37,15 @@
 #' Temp needs to be a file that the client and all servers can
 #' read from.
 #' 
+#' @name pbdRscript
+#' @rdname pbdRscript
+NULL
+
+
+
+#' @rdname pbdRscript
 #' @export
-pbdRscript <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat=FALSE,
+pbdRscript_cmd <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat=FALSE,
     pid=TRUE, wait=TRUE, temp=tempfile())
 {
   ### Input checks
@@ -66,7 +73,7 @@ pbdRscript <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat=FAL
   
   if (auto)
   {
-    auto.header <- "suppressPackageStartupMessages(library(pbdMPI, quietly=TRUE))\ninit()\n\n"
+    auto.header <- "suppressPackageStartupMessages(library(pbdMPI, quietly=TRUE))\n\n"
     
     if (auto.dmat)
       auto.header <- paste(auto.header, "\n", "suppressPackageStartupMessages(library(pbdDMAT, quietly=TRUE))\ninit.grid()\n\n")
@@ -74,7 +81,7 @@ pbdRscript <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat=FAL
     auto.footer <- "\n\nfinalize()"
     body <- paste(auto.header, body, auto.footer, collapse="\n")
   }
-  
+
   ### Create a temp file for pbdR servers.
   script <- temp
   if (same.str(get.os(), "windows"))
@@ -95,6 +102,17 @@ pbdRscript <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat=FAL
   
   
   cmd <- paste(mpicmd, "-np", nranks, "Rscript", script)
+  cmd
+}
+
+
+
+#' @rdname pbdRscript
+#' @export
+pbdRscript <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat=FALSE,
+    pid=TRUE, wait=TRUE, temp=tempfile())
+{
+  cmd <- pbdRscript_cmd(body, mpicmd, nranks, auto, auto.dmat, pid, wait, temp)
   
   ### Launch mpi commands.
   if (!same.str(get.os(), "windows"))
