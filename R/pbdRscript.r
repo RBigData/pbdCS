@@ -136,7 +136,7 @@ pbdRscript <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat=FAL
     {
       ret <- shell.exec(script.bat)
     } else{
-      ret <- shellexec.wcc(script.bat)
+      ret <- eval(parse(text = "shellexec.wcc(script.bat)"))
     }
   }
   
