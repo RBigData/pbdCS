@@ -82,21 +82,6 @@ pbd_launch_servers <- function(nranks=2, mpicmd="mpirun", bcast_method="zmq", po
 
 
 
-#' @rdname launchers
-#' @export
-pbd_launch_client <- function(remote_addr="localhost", port=5555)
-{
-  pbdenv$whoami <- "local"
-  pbdenv$port <- port
-  
-  pbdenv$remote_addr <- remote_addr
-  
-  pbd_repl()
-  
-  invisible(TRUE)
-}
-
-
 
 #' @rdname launchers
 #' @export

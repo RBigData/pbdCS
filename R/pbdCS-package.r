@@ -5,6 +5,7 @@
 #' @import methods
 #' @import pbdMPI
 #' @import pbdZMQ
+#' @import remoter
 #' 
 #' @importFrom stats runif
 #' @importFrom utils capture.output globalVariables
