@@ -2,6 +2,7 @@
 #'
 #' @name pbdCS-package
 #' 
+#' @import assertthat
 #' @import methods
 #' @import pbdMPI
 #' @import pbdZMQ

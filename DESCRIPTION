@@ -12,15 +12,17 @@ Description: A set of utilities for interactively using the 'pbdR' set
     or MPI (see vignette for details).
 License: BSD 2-clause License + file LICENSE
 Depends:
-    R (>= 3.0.0),
-    methods,
-    pbdZMQ (>= 0.1-1),
-    pbdMPI (>= 0.3-1),
-    remoter (>= 0.3-0)
+    R (>= 3.0.0)
 Imports:
+    methods,
     stats,
-    utils
-Enhances: pbdSLAP,
+    utils,
+    assertthat (>= 0.1),
+    pbdMPI (>= 0.3-1),
+    pbdZMQ (>= 0.1-1),
+    remoter (>= 0.3-0)
+Enhances: 
+    pbdSLAP,
     pbdBASE,
     pbdDMAT
 Suggests:

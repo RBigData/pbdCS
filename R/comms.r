@@ -1,17 +1,3 @@
-send <- function(data, send.more=FALSE)
-{
-  send.socket(getval(socket), data=data, send.more=send.more)
-}
-
-
-
-receive <- function()
-{
-  receive.socket(getval(socket))
-}
-
-
-
 send_remote <- function(data, send.more=FALSE)
 {
   send.socket(getval(remote_socket), data=data, send.more=send.more)
