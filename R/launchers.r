@@ -15,8 +15,6 @@
 #' @param bcast_method
 #' The method used by the servers to communicate.  Options are "zmq"
 #' for ZeroMQ-based communication, or "mpi" for 
-#' @param remote_addr
-#' The remote host/address/endpoint.
 #' @param port
 #' A numeric value, or optionally for \code{pbdSpawn()}, the string
 #' "random".  For numeric values, this is the port that will be
@@ -50,7 +48,8 @@
 #' will not busy wait, in addition to the other benefits ZeroMQ
 #' affords; thus, \code{bcast_method="zmq"} is the default.
 #' 
-#' To shut down the servers and the client, use the command \code{pbd_exit()}.
+#' To shut down the servers and the client, use the command \code{exit()}
+#' from the remoter package.
 #' 
 #' @examples
 #' \dontrun{
@@ -60,7 +59,7 @@
 #' }
 #' 
 #' @rdname launchers
-#' @seealso \code{\link{pbdRscript}, \link{pbd_exit}}
+#' @seealso \code{\link{pbdRscript}}
 #' @export
 pbd_launch_servers <- function(nranks=2, mpicmd="mpirun", bcast_method="zmq", port=5555, auto.dmat=FALSE)
 {

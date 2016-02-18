@@ -28,8 +28,6 @@ will be selected.}
 
 \item{auto.dmat}{Logical; deteremines if pbdDMAT should automatically be loaded
 and \code{init.grid()} called.}
-
-\item{remote_addr}{The remote host/address/endpoint.}
 }
 \description{
 This function is a simple wrapper around the system() command.  As such,
@@ -62,7 +60,8 @@ epsilon faster, but it will busy-wait.  The ZeroMQ bcast method
 will not busy wait, in addition to the other benefits ZeroMQ
 affords; thus, \code{bcast_method="zmq"} is the default.
 
-To shut down the servers and the client, use the command \code{pbd_exit()}.
+To shut down the servers and the client, use the command \code{exit()}
+from the remoter package.
 }
 \examples{
 \dontrun{
@@ -73,6 +72,6 @@ pbd_launch_client()
 
 }
 \seealso{
-\code{\link{pbdRscript}, \link{pbd_exit}}
+\code{\link{pbdRscript}}
 }
 

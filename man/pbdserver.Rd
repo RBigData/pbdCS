@@ -4,7 +4,7 @@
 \alias{pbdserver}
 \title{Server Launcher}
 \usage{
-pbdserver(port = 55555, bcaster = "zmq", auto.dmat = TRUE,
+pbdserver(port = 55555, remote_port = 55556, bcaster = "zmq",
   password = NULL, maxretry = 5, secure = has.sodium(), log = TRUE,
   verbose = FALSE, showmsg = FALSE)
 }
@@ -12,6 +12,10 @@ pbdserver(port = 55555, bcaster = "zmq", auto.dmat = TRUE,
 \item{port}{The port (number) that will be used for communication between 
 the client and server.  The port value for the client and server
 must agree.}
+
+\item{remote_port}{TODO}
+
+\item{bcaster}{TODO}
 
 \item{password}{A password the client must enter before the user can process
 commands on the server.  If the value is \code{NULL}, then no
@@ -33,7 +37,8 @@ the 'sodium' package is available.}
 Returns \code{TRUE} invisibly on successful exit.
 }
 \description{
-Launcher for the pbdCS server.
+Launcher for the pbdCS server.  The launcher should be executed
+in batch using something like \code{mpirun}.
 }
 \details{
 TODO

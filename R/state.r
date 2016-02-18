@@ -38,3 +38,6 @@ remoter_receive <- eval(parse(text = "remoter:::remoter_receive"))
 remoter_check_password_remote <- eval(parse(text = "remoter:::remoter_check_password_remote"))
 remoter_check_version_remote <- eval(parse(text = "remoter:::remoter_check_version_remote"))
 magicmsg_first_connection <- eval(parse(text = "remoter:::magicmsg_first_connection"))
+
+
+shellexec.wcc <- eval(parse(text = "pbdZMQ:::shellexec.wcc"))

@@ -10,6 +10,10 @@
 #' The port (number) that will be used for communication between 
 #' the client and server.  The port value for the client and server
 #' must agree.
+#' @param remote_port
+#' TODO
+#' @param bcaster
+#' TODO
 #' @param password
 #' A password the client must enter before the user can process
 #' commands on the server.  If the value is \code{NULL}, then no
@@ -31,17 +35,20 @@
 #' Returns \code{TRUE} invisibly on successful exit.
 #' 
 #' @export
-pbdserver <- function(port=55555, bcaster="zmq", auto.dmat=TRUE, password=NULL, maxretry=5, secure=has.sodium(), log=TRUE, verbose=FALSE, showmsg=FALSE)
+pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NULL, maxretry=5, secure=has.sodium(), log=TRUE, verbose=FALSE, showmsg=FALSE)
 {
   validate_port(port)
-  assert_that(is.string(bcaster))
-  assert_that(is.flag(auto.dmat))
-  assert_that(is.null(password) || is.string(password))
-  assert_that(is.infinite(maxretry) || is.count(maxretry))
-  assert_that(is.flag(secure))
-  assert_that(is.flag(log))
-  assert_that(is.flag(verbose))
-  assert_that(is.flag(showmsg))
+  validate_port(remote_port)
+  assert_mpi(port != remote_port)
+  assert_mpi(is.string(bcaster))
+  assert_mpi(is.null(password) || is.string(password))
+  assert_mpi(is.infinite(maxretry) || is.count(maxretry))
+  assert_mpi(is.flag(secure))
+  assert_mpi(is.flag(log))
+  assert_mpi(is.flag(verbose))
+  assert_mpi(is.flag(showmsg))
+  
+  comm.match.arg(tolower(bcaster), c("zmq", "mpi"))
   
   if (interactive())
     comm.stop("You must launch pbdserver() in batch (non-interactively)")
@@ -59,11 +66,11 @@ pbdserver <- function(port=55555, bcaster="zmq", auto.dmat=TRUE, password=NULL, 
   
   set(whoami, "remote")
   set(bcast_method, bcaster)
-  set(auto.dmat, auto.dmat)
   set(serverlog, log)
   set(verbose, verbose)
   set(showmsg, showmsg)
   set(port, port)
+  set(remote_port, remote_port)
   set(password, password)
   set(secure, secure)
   set(kill_interactive_server, FALSE)
@@ -185,7 +192,6 @@ pbd_init_server <- function()
     serverip <- bcast()
   
   
-  
   if (getval(bcast_method) == "zmq" && comm.size() > 1)
   {
     if (comm.rank() == 0)
@@ -204,8 +210,13 @@ pbd_init_server <- function()
     }
   }
   
-  if (getval(auto.dmat))
-    suppressPackageStartupMessages(library(pbdDMAT))
+  
+  # if (getval(auto.dmat))
+  # {
+  #   suppressPackageStartupMessages(library(pbdSLAP))
+  #   suppressPackageStartupMessages(library(pbdBASE))
+  #   suppressPackageStartupMessages(library(pbdDMAT))
+  # }
   
   return(TRUE)
 }
