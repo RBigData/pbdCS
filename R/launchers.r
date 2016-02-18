@@ -68,9 +68,9 @@ pbd_launch_servers <- function(nranks=2, mpicmd="mpirun", bcast_method="zmq", po
   
   rscript <- paste0("
     suppressPackageStartupMessages(library(pbdCS))
-    pbdenv$whoami <- 'remote'
-    pbdenv$port <- ", port, "
-    pbdenv$bcast_method <- \"", bcast_method, "\"
+    .pbdenv$whoami <- 'remote'
+    .pbdenv$port <- ", port, "
+    .pbdenv$bcast_method <- \"", bcast_method, "\"
     pbdCS:::pbd_repl()
     finalize()
   ")

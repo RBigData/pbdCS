@@ -42,9 +42,9 @@ pbd_bcast_zmq <- function(msg)
 
 pbd_bcast <- function(msg)
 {
-  if (pbdenv$bcast_method == "mpi")
+  if (.pbdenv$bcast_method == "mpi")
     msg <- pbd_bcast_mpi(msg=msg)
-  else if (pbdenv$bcast_method == "zmq")
+  else if (.pbdenv$bcast_method == "zmq")
     msg <- pbd_bcast_zmq(msg=msg)
   
   return(msg)

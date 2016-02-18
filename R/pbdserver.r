@@ -1,6 +1,7 @@
 #' Server Launcher
 #' 
-#' Launcher for the pbdCS server.
+#' Launcher for the pbdCS server.  The launcher should be executed
+#' in batch using something like \code{mpirun}.
 #' 
 #' @details
 #' TODO
@@ -42,16 +43,19 @@ pbdserver <- function(port=55555, bcaster="zmq", auto.dmat=TRUE, password=NULL, 
   assert_that(is.flag(verbose))
   assert_that(is.flag(showmsg))
   
+  if (interactive())
+    comm.stop("You must launch pbdserver() in batch (non-interactively)")
+  
   if (!log && verbose)
   {
-    warning("logging must be enabled for verbose logging! enabling logging...")
+    comm.warning("logging must be enabled for verbose logging! enabling logging...")
     log <- TRUE
   }
   
   if (!has.sodium() && secure)
-    stop("secure servers can only be launched if the 'sodium' package is installed")
+    comm.stop("secure servers can only be launched if the 'sodium' package is installed")
   
-  reset_state()
+  pbd_reset_state()
   
   set(whoami, "remote")
   set(bcast_method, bcaster)
@@ -62,13 +66,15 @@ pbdserver <- function(port=55555, bcaster="zmq", auto.dmat=TRUE, password=NULL, 
   set(port, port)
   set(password, password)
   set(secure, secure)
+  set(kill_interactive_server, FALSE)
   
-  logprint(paste("*** Launching", ifelse(getval(secure), "secure", "UNSECURE"), "server ***"), preprint="\n\n")
+  mpilogprint(paste("*** Launching", ifelse(getval(secure), "secure", "UNSECURE"), "pbdR server ***"), preprint="\n\n")
   
   rm("port", "password", "maxretry", "showmsg", "secure", "log", "verbose")
   invisible(gc())
   
   pbd_repl_server()
+  pbdMPI::finalize()
   
   invisible(TRUE)
 }
@@ -90,14 +96,29 @@ pbd_server_eval <- function(input, whoami, env)
   set.status(lasterror, NULL)
   
   if (comm.rank() == 0)
-    msg <- receive()
+    msg <- remoter_receive()
   else
     msg <- NULL
   
   msg <- pbd_bcast(msg)
   barrier() # just in case ...
   
-  msg <- pbd_eval_filter_server(msg=msg)
+  ### Run first-time checks
+  if (length(msg)==1 && msg == magicmsg_first_connection)
+  {
+    if (comm.rank() == 0)
+    {
+      test <- remoter_check_password_remote()
+      if (!test) return(invisible())
+      remoter_check_version_remote()
+    }
+    
+    barrier()
+    return(invisible())
+  }
+  
+  # TODO
+  # msg <- pbd_eval_filter_server(msg=msg)
   
   ret <- 
   withCallingHandlers(
@@ -120,7 +141,7 @@ pbd_server_eval <- function(input, whoami, env)
         set.status(ret, utils::capture.output(ret$value))
     }
     
-    send(getval(status))
+    remoter_send(getval(status))
   }
 }
 
@@ -128,24 +149,11 @@ pbd_server_eval <- function(input, whoami, env)
 
 pbd_get_remote_addr <- function()
 {
-  if (pbdenv$whoami == "local")
-  {
-    context <- zmq$Context()
-    socket <- context$socket("ZMQ_REP")
-    socket$bind(address("*", pbdenv$port))
-    pbdenv$remote_addr <- socket$receive()
-    socket$send("got it")
-    
-    ### TODO store address and port in ~/.pbdR/remote
-    socket$close()
-    rm(socket);rm(context)
-    invisible(gc())
-  }
-  else if (pbdenv$whoami == "remote"  &&  comm.rank() == 0)
+  if (comm.rank() == 0)
   {
     context <- zmq$Context()
     socket <- context$socket("ZMQ_REQ")
-    socket$connect(address("localhost", pbdenv$port))
+    socket$connect(address("localhost", .pbdenv$port))
     socket$send(getip())
     socket$receive()
     socket$disconnect()
@@ -158,12 +166,9 @@ pbd_get_remote_addr <- function()
 
 
 
-
-
-
 pbd_init_server <- function()
 {
-  # if (pbdenv$get_remote_addr)
+  # if (.pbdenv$get_remote_addr)
   #   pbd_get_remote_addr()
   
   ### Order very much matters!
@@ -210,5 +215,6 @@ pbd_init_server <- function()
 pbd_repl_server <- function(env=sys.parent())
 {
   remoter_repl_server(env=env, initfun=pbd_init_server, evalfun=pbd_server_eval)
+  
   invisible()
 }
