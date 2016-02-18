@@ -14,25 +14,21 @@ License: BSD 2-clause License + file LICENSE
 Depends:
     R (>= 3.0.0)
 Imports:
-    methods,
     stats,
     utils,
     assertthat (>= 0.1),
     pbdMPI (>= 0.3-1),
-    pbdZMQ (>= 0.1-1),
-    remoter (>= 0.3-0)
-Enhances: 
-    pbdSLAP,
-    pbdBASE,
-    pbdDMAT
+    pbdZMQ (>= 0.2-1),
+    remoter (>= 0.3-1)
 Suggests:
+    pbdDMAT,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: yes
 ByteCompile: yes
 Authors@R: c(person("Drew", "Schmidt", role=c("aut", "cre"),
-  email="schmidt@math.utk.edu"),
+  email="wrathematics@gmail.com"),
   person("Wei-Chen", "Chen", role="aut"))
-Maintainer: Drew Schmidt <schmidt@math.utk.edu>
+Maintainer: Drew Schmidt <wrathematics@gmail.com>
 RoxygenNote: 5.0.1
