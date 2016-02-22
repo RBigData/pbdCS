@@ -66,14 +66,17 @@ pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NUL
   
   set(whoami, "remote")
   set(bcast_method, bcaster)
-  set(serverlog, log)
-  set(verbose, verbose)
-  set(showmsg, showmsg)
   set(port, port)
   set(remote_port, remote_port)
   set(password, password)
   set(secure, secure)
   set(kill_interactive_server, FALSE)
+  
+  set(serverlog, log)
+  set(verbose, verbose)
+  set(showmsg, showmsg)
+  if (log)
+    set(logfile, logfile_init())
   
   mpilogprint(paste("*** Launching", ifelse(getval(secure), "secure", "UNSECURE"), "pbdR server ***"), preprint="\n\n")
   
@@ -103,7 +106,10 @@ pbd_server_eval <- function(input, whoami, env)
   set.status(lasterror, NULL)
   
   if (comm.rank() == 0)
+  {
     msg <- remoter_receive()
+    mpilogprint(level="RMSG", msg[length(msg)], checkshowmsg=TRUE)
+  }
   else
     msg <- NULL
   

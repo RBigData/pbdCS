@@ -14,6 +14,7 @@ pbd_reset_state <- function()
 
 
 
+### remoter imports
 set <- eval(parse(text = "remoter:::set"))
 getval <- eval(parse(text = "remoter:::getval"))
 get.status <- eval(parse(text = "remoter:::get.status"))
@@ -25,6 +26,7 @@ remoter_error <- eval(parse(text = "remoter:::remoter_error"))
 remoter_repl_server <- eval(parse(text = "remoter:::remoter_repl_server"))
 validate_port <- eval(parse(text = "remoter:::validate_port"))
 
+logfile_init <- eval(parse(text = "remoter:::logfile_init"))
 logprint <- eval(parse(text = "remoter:::logprint"))
 mpilogprint <- function(msg, checkverbose=FALSE, checkshowmsg=FALSE, preprint="", level="")
 {
