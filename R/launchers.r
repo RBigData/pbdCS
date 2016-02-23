@@ -15,8 +15,6 @@
 #' @param bcast_method
 #' The method used by the servers to communicate.  Options are "zmq"
 #' for ZeroMQ-based communication, or "mpi" for 
-#' @param remote_addr
-#' The remote host/address/endpoint.
 #' @param port
 #' A numeric value, or optionally for \code{pbdSpawn()}, the string
 #' "random".  For numeric values, this is the port that will be
@@ -50,7 +48,8 @@
 #' will not busy wait, in addition to the other benefits ZeroMQ
 #' affords; thus, \code{bcast_method="zmq"} is the default.
 #' 
-#' To shut down the servers and the client, use the command \code{pbd_exit()}.
+#' To shut down the servers and the client, use the command \code{exit()}
+#' from the remoter package.
 #' 
 #' @examples
 #' \dontrun{
@@ -60,7 +59,7 @@
 #' }
 #' 
 #' @rdname launchers
-#' @seealso \code{\link{pbdRscript}, \link{pbd_exit}}
+#' @seealso \code{\link{pbdRscript}}
 #' @export
 pbd_launch_servers <- function(nranks=2, mpicmd="mpirun", bcast_method="zmq", port=5555, auto.dmat=FALSE)
 {
@@ -68,9 +67,9 @@ pbd_launch_servers <- function(nranks=2, mpicmd="mpirun", bcast_method="zmq", po
   
   rscript <- paste0("
     suppressPackageStartupMessages(library(pbdCS))
-    pbdenv$whoami <- 'remote'
-    pbdenv$port <- ", port, "
-    pbdenv$bcast_method <- \"", bcast_method, "\"
+    .pbdenv$whoami <- 'remote'
+    .pbdenv$port <- ", port, "
+    .pbdenv$bcast_method <- \"", bcast_method, "\"
     pbdCS:::pbd_repl()
     finalize()
   ")
@@ -80,21 +79,6 @@ pbd_launch_servers <- function(nranks=2, mpicmd="mpirun", bcast_method="zmq", po
   invisible(TRUE)
 }
 
-
-
-#' @rdname launchers
-#' @export
-pbd_launch_client <- function(remote_addr="localhost", port=5555)
-{
-  pbdenv$whoami <- "local"
-  pbdenv$port <- port
-  
-  pbdenv$remote_addr <- remote_addr
-  
-  pbd_repl()
-  
-  invisible(TRUE)
-}
 
 
 

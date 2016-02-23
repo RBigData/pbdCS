@@ -75,3 +75,15 @@ dirsep <- function()
 }
 
 
+
+assert_mpi <- function(..., env = parent.frame())
+{
+  test <- tryCatch(assert_that(env=env, ...), error=identity)
+  if (!is.logical(test))
+  {
+    msg <- gsub(test, pattern="(^<assert|>$|Error: )", replacement="")
+    comm.stop(msg, mpi.finalize=TRUE)
+  }
+  else
+    TRUE
+}
