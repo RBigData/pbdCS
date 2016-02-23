@@ -2,9 +2,10 @@
 #'
 #' @name pbdCS-package
 #' 
-#' @import methods
+#' @import assertthat
 #' @import pbdMPI
 #' @import pbdZMQ
+#' @import remoter
 #' 
 #' @importFrom stats runif
 #' @importFrom utils capture.output globalVariables

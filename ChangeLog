@@ -1,6 +1,9 @@
+Release 0.1-1:
+  * Switch to depending on remoter.
+  * add pbdserver().
+
 Release 0.1-0:
   * Added vignette.
   * Fixed to work on Windows (wcc).
   * Develop basic client/server over ZMQ.
   * Rename pbdinline to pbdCS.
-
