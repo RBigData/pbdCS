@@ -37,16 +37,43 @@
 #' Temp needs to be a file that the client and all servers can
 #' read from.
 #' 
-#' @name pbdRscript
-#' @rdname pbdRscript
-NULL
-
-
-
-#' @rdname pbdRscript
 #' @export
-pbdRscript_cmd <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat=FALSE,
-    pid=TRUE, wait=TRUE, temp=tempfile())
+pbdRscript <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat=FALSE, pid=TRUE, wait=TRUE, temp=tempfile())
+{
+  cmd <- pbdRscript_cmd(body, mpicmd, nranks, auto, auto.dmat, pid, wait, temp)
+  
+  ### Launch mpi commands.
+  if (!same.str(get.os(), "windows"))
+  {
+    if (pid)
+      cmd <- paste(cmd, "& echo \"PID=$!\n")
+    
+    ### Run system shell command.
+    ret <- system(cmd, intern=TRUE, wait=wait)
+  }
+  else
+  {
+    ### Dump command to a windows batch file.
+    conn.bat <- file(script.bat, open="wt")
+    writeLines(cmd, conn.bat)
+    close(conn.bat)
+    script.bat <- sub("^\\./", "", script.bat)
+    
+    ### Run system batch command via shell.exec.
+    if (!is.loaded("shellexec_wcc", PACKAGE = "pbdZMQ", type = "Call"))
+    {
+      ret <- shell.exec(script.bat)
+    } else{
+      ret <- shellexec.wcc(script.bat)
+    }
+  }
+  
+  invisible()
+}
+
+
+
+pbdRscript_cmd <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat=FALSE, pid=TRUE, wait=TRUE, temp=tempfile())
 {
   ### Input checks
   if (!is.character(body))
@@ -97,49 +124,10 @@ pbdRscript_cmd <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat
   writeLines("unlink(.__the_pbd_script)", conn)
   close(conn)
   
-  if (pbdenv$debug)
-    cat("server tmpfile:  ", script, "\n")
+  # if (pbdenv$debug)
+  #   cat("server tmpfile:  ", script, "\n")
   
   
   cmd <- paste(mpicmd, "-np", nranks, "Rscript", script)
   cmd
 }
-
-
-
-#' @rdname pbdRscript
-#' @export
-pbdRscript <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat=FALSE,
-    pid=TRUE, wait=TRUE, temp=tempfile())
-{
-  cmd <- pbdRscript_cmd(body, mpicmd, nranks, auto, auto.dmat, pid, wait, temp)
-  
-  ### Launch mpi commands.
-  if (!same.str(get.os(), "windows"))
-  {
-    if (pid)
-      cmd <- paste(cmd, "& echo \"PID=$!\n")
-    
-    ### Run system shell command.
-    ret <- system(cmd, intern=FALSE, wait=wait)
-  }
-  else
-  {
-    ### Dump command to a windows batch file.
-    conn.bat <- file(script.bat, open="wt")
-    writeLines(cmd, conn.bat)
-    close(conn.bat)
-    script.bat <- sub("^\\./", "", script.bat)
-    
-    ### Run system batch command via shell.exec.
-    if (!is.loaded("shellexec_wcc", PACKAGE = "pbdZMQ", type = "Call"))
-    {
-      ret <- shell.exec(script.bat)
-    } else{
-      ret <- shellexec.wcc(script.bat)
-    }
-  }
-  
-  invisible()
-}
-

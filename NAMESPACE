@@ -2,9 +2,7 @@
 
 export(getip)
 export(pbdRscript)
-export(pbdRscript_cmd)
 export(pbdSpawn)
-export(pbd_launch_servers)
 export(pbdserver)
 import(assertthat)
 import(pbdMPI)
