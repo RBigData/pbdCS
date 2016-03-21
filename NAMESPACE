@@ -3,6 +3,7 @@
 export(getip)
 export(pbdRscript)
 export(pbdSpawn)
+export(pbdclient)
 export(pbdserver)
 import(assertthat)
 import(pbdMPI)
