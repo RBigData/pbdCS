@@ -1,6 +1,7 @@
 Release 0.1-1:
   * Switch to depending on remoter.
   * add pbdserver().
+  * Fix getPass() bug on pbdserver().
 
 Release 0.1-0:
   * Added vignette.

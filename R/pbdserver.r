@@ -37,6 +37,9 @@
 #' @export
 pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NULL, maxretry=5, secure=has.sodium(), log=TRUE, verbose=FALSE, showmsg=FALSE)
 {
+  if (comm.rank() != 0)
+    password <- NULL # don't want to run getPass() on other ranks
+  
   validate_port(port)
   validate_port(remote_port)
   assert_mpi(port != remote_port)

@@ -15,7 +15,7 @@ receive_remote <- function()
 # pbd_bcast_mpi <- function(msg) bcast(msg, rank.source=0)
 pbd_bcast_mpi <- function(msg) 
 {
-  spmd.bcast.message(msg, rank.source = 0)
+  pbdMPI::bcast(msg, rank.source = 0)
 }
 
 
@@ -30,9 +30,7 @@ pbd_bcast_zmq <- function(msg)
         send_remote(data=msg)
     }
     else
-    {
       msg <- receive_remote()
-    }
   }
   
   msg
@@ -42,9 +40,9 @@ pbd_bcast_zmq <- function(msg)
 
 pbd_bcast <- function(msg)
 {
-  if (.pbdenv$bcast_method == "mpi")
+  if (getval(bcast_method) == "mpi")
     msg <- pbd_bcast_mpi(msg=msg)
-  else if (.pbdenv$bcast_method == "zmq")
+  else if (getval(bcast_method) == "zmq")
     msg <- pbd_bcast_zmq(msg=msg)
   
   return(msg)
