@@ -4,9 +4,10 @@
 #' 
 #' @import assertthat
 #' @import pbdMPI
-#' @import pbdZMQ
 #' @import remoter
 #' 
+#' @importFrom pbdZMQ zmq send.socket receive.socket init.socket
+#'   init.context bind.socket connect.socket address random_port
 #' @importFrom stats runif
 #' @importFrom utils capture.output globalVariables
 #'

@@ -1,6 +1,6 @@
-#' Client/Server Launchers
+#' Server Launcher
 #' 
-#' Launchers for the pbdR client/server.
+#' Launcher for the pbdR server.
 #' 
 #' @description
 #' This function is a simple wrapper around the system() command.  As such,
@@ -12,7 +12,7 @@
 #' @param mpicmd
 #' The command to launch mpi as a string (e.g., "mpirun", "mpiexec", 
 #' "aprun", ...).
-#' @param bcast_method
+#' @param bcaster
 #' The method used by the servers to communicate.  Options are "zmq"
 #' for ZeroMQ-based communication, or "mpi" for 
 #' @param port
@@ -41,12 +41,12 @@
 #' way.  Once a command is sent from the client to MPI rank 0,
 #' that command is then "broadcasted" from MPI rank 0 to the other
 #' MPI ranks.  The method of broadcast is handled by the input
-#' \code{bcast_method}.  If \code{bcast_method="mpi"}, then \code{MPI_bcast}
-#' is used to transmit the command.  Otherwise (\code{bcast_method="zmq"})
+#' \code{bcaster}.  If \code{bcaster="mpi"}, then \code{MPI_bcast}
+#' is used to transmit the command.  Otherwise (\code{bcaster="zmq"})
 #' uses ZeroMQ with a PUSH/PULL pattern.  The MPI method is probably
 #' epsilon faster, but it will busy-wait.  The ZeroMQ bcast method
 #' will not busy wait, in addition to the other benefits ZeroMQ
-#' affords; thus, \code{bcast_method="zmq"} is the default.
+#' affords; thus, \code{bcaster="zmq"} is the default.
 #' 
 #' To shut down the servers and the client, use the command \code{exit()}
 #' from the remoter package.
@@ -58,33 +58,10 @@
 #' pbd_launch_client()
 #' }
 #' 
-#' @rdname launchers
 #' @seealso \code{\link{pbdRscript}}
 #' @export
-pbd_launch_servers <- function(nranks=2, mpicmd="mpirun", bcast_method="zmq", port=5555, auto.dmat=FALSE)
-{
-  bcast_method <- match.arg(tolower(bcast_method), c("zmq", "mpi"))
-  
-  rscript <- paste0("
-    suppressPackageStartupMessages(library(pbdCS))
-    .pbdenv$whoami <- 'remote'
-    .pbdenv$port <- ", port, "
-    .pbdenv$bcast_method <- \"", bcast_method, "\"
-    pbdCS:::pbd_repl()
-    finalize()
-  ")
-  
-  pbdRscript(body=rscript, mpicmd=mpicmd, nranks=nranks, auto=TRUE, pid=FALSE, wait=FALSE, auto.dmat=auto.dmat)
-  
-  invisible(TRUE)
-}
-
-
-
-
-#' @rdname launchers
-#' @export
-pbdSpawn <- function(nranks=2, bcast_method="zmq", port="random", auto.dmat=FALSE)
+# port=55555, remote_port=55556, bcaster="zmq", password=NULL, maxretry=5, secure=has.sodium(), log=TRUE, verbose=FALSE, showmsg=FALSE)
+pbdSpawn <- function(nranks=2, mpicmd="mpirun", bcaster="zmq", port="random", auto.dmat=FALSE)
 {
   if (is.character(port))
   {
@@ -95,9 +72,15 @@ pbdSpawn <- function(nranks=2, bcast_method="zmq", port="random", auto.dmat=FALS
     stop("")
   
   ### TODO check port
+  bcaster <- match.arg(tolower(bcaster), c("zmq", "mpi"))
   
-  pbd_launch_servers(nranks=nranks, bcast_method=bcast_method, port=port, auto.dmat=auto.dmat)
-  pbd_launch_client(port=port)
+  rscript <- paste0("
+    suppressPackageStartupMessages(library(pbdCS))
+    pbdCS::pbdserver(bcaster=\"", bcaster, "\")
+    finalize()
+  ")
+  
+  pbdRscript(body=rscript, mpicmd=mpicmd, nranks=nranks, auto=TRUE, pid=FALSE, wait=FALSE, auto.dmat=auto.dmat)
   
   invisible(TRUE)
 }
