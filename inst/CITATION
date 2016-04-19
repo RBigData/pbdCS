@@ -1,0 +1,23 @@
+citHeader("To cite pbdCS in a publication use:")
+
+citEntry(
+  entry = "Misc",
+  title = "{pbdCS}: pbdR Client/Server Utilities",
+  author = personList(as.person("Drew Schmidt"),
+                      as.person("Wei-Chen Chen")),
+  year = "2015",
+  note = "{R} Package, URL http://cran.r-project.org/package=pbdCS",
+  textVersion = "Schmidt, D. and Chen, W.-C. (2015) pbdCS: pbdR Client/Server Utilities. R Package, URL http://cran.r-project.org/package=pbdCS",
+  key = "Schmidt2015pbdCSpackage"
+)
+
+citEntry(
+  entry = "Manual",
+  title = "Guide to the {pbdCS} Package",
+  author = personList(as.person("Drew Schmidt")),
+  year = "2015",
+  note = "{R} Vignette, URL http://cran.r-project.org/package=pbdCS",
+  textVersion = "Schmidt, D. (2015) Guide to the pbdCS Package. R Vignette, URL http://cran.r-project.org/package=pbdCS",
+  key = "Schmidt2015pbdCSvignette"
+)
+

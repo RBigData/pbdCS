@@ -232,7 +232,7 @@ pbd_init_server <- function()
 
 
 
-pbd_repl_server <- function(env=sys.parent())
+pbd_repl_server <- function(env=globalenv())
 {
   remoter_repl_server(env=env, initfun=pbd_init_server, evalfun=pbd_server_eval)
   
