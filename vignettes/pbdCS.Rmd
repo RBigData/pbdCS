@@ -21,10 +21,7 @@ vignette: >
 
 # Introduction
 
-The **pbdCS** package [[@pbdCS]] ...
-
-**pbdR** [[@pbdR2012]]
-
+The **pbdCS** package [[@pbdCS]] is a set of utilities for interactively controlling batch, SPMD servers, such as those available in the **pbdR** [[@pbdR2012]] ecosystem of R packages.
 
 <center>
 <img src="pics/cs.png">
@@ -41,11 +38,15 @@ You can install the stable version from CRAN using the usual `install.packages()
 install.packages("pbdCS")
 ```
 
-The development version is maintained on GitHub.  You can install this version using the `devtools` package:
+The development version is maintained on GitHub, and can easily be installed by any of the packages that offer installations from GitHub:
 
 ```r
+### Pick your preference
 devtools::install_github("RBigData/pbdCS")
+ghit::install_github("RBigData/pbdCS")
+remotes::install_github("RBigData/pbdCS")
 ```
+
 
 
 
@@ -54,15 +55,12 @@ devtools::install_github("RBigData/pbdCS")
 # Using the pbdserver
 
 ## Background
+**pbdCS** is heavily dependent on the **remoter** package.  You are strongly encouraged to familiarize yourself with it before proceeding.
 
-TODO
-remoter
-The `password`, `maxretry`, `secure`, `log`, `verbose`, and `showmsg` options are identical to those in `remoter::server`.  There are several key differences in the pbdserver, however.
+To launch a pbdserver, you can use `pbdserver()` or `pbdSpawn()`.  More information about each is provided below.  Each function has several options which should look familiar to those familiar with **remoter**.  The `password`, `maxretry`, `secure`, `log`, `verbose`, and `showmsg` options are identical to those in `remoter::server`.  There are several key differences in the pbdserver, however.
 
-First, there are two ports, `port` and `remote_port`.
+First, there are two ports, `port` and `remote_port`.  The former is the port used for connections between rank 0 of the MPI ranks and the client.  The latter is used if the default `bcaster` is used, namely `zmq`.  If the other supported `bcaster` is used, namely `mpi`, then this argument is ignored.
 
-TODO
-`bcaster`
 For more information, see the Implementation Details section below.
 
 
@@ -95,13 +93,13 @@ Use `pbdCS::pbdclient()` or `remoter::client()` as when connecting to a **remote
 
 # Implementation Details
 
-TODO: explain bcaster
+When setting up the pbdservers, by default they will use ZeroMQ to communicate with each other.  So when a client connects and begins issuing commands, those are propagated from rank 0 to the other ranks via a push/pull ZeroMQ socket.  This can be changed to use MPI's `bcast()` by setting `bcaster=mpi` when setting up the pbdservers, but this is generally not recommended.  The ZeroMQ method should be sufficiently fast, but it does not busy wait for commands, which is a serious advantage in the interactive environment.
 
 <center>
 <img src="pics/cs_comm_1slide.png">
 </center>
 
-The above shows an example with a single input and its corresponding return return.  Here, the user enters `allreduce(1)` from **pbdMPI**, which will use communication between the SPMD servers to return the total number of servers running.  The client captures this input and passes it along to rank 0 of the SPMD servers.  Then, using the push/pull sockets, the client's message is broadcast from rank 0 to all other SPMD servers.  Finally, the command is evaluated, and the result from rank 0 is returned to the client.  This pattern assumes that the `bcaster` method used when setting up the servers was `zmq`.  If `mpi` is chosen, then the push/pull communication is replaced by an MPI `bcast()` call.
+The above shows an example with a single input and its corresponding return return.  Here, the user enters `allreduce(1)` from **pbdMPI**, which will use communication between the SPMD servers to return the total number of servers running.  The client captures this input and passes it along to rank 0 of the SPMD servers.  Then, using the push/pull sockets, the client's message is broadcast from rank 0 to all other SPMD servers.  Finally, the command is evaluated, and the result from rank 0 is returned to the client.  This pattern assumes that the `bcaster` method used when setting up the servers was ZeroMQ.
 
 
 
