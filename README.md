@@ -8,6 +8,23 @@
 A client/server framework for the pbdR packages. The client is actually the same as the client from the **remoter** package.
 
 
+## Installation
+
+#### Stable Version
+```r
+install.packages("pbdCS")
+```
+
+#### Development Version
+```r
+### Pick your preference
+devtools::install_github("RBigData/pbdCS")
+ghit::install_github("RBigData/pbdCS")
+remotes::install_github("RBigData/pbdCS")
+```
+
+
+
 ## Usage
 
 Launch the batch servers:
@@ -22,15 +39,7 @@ Connect the client to the servers by running in an interactive session:
 pbdCS::pbdclient()
 ```
 
-For more information, see the **remoter** and/or **pbdCS** package vignettes.
-
-
-
-## Installation
-
-```r
-devtools::install_github("wrathematics/pbdCS")
-```
+For more information, see the **remoter** and **pbdCS** package vignettes.
 
 
 
