@@ -4,10 +4,11 @@
 \alias{pbdclient}
 \title{Client Launcher}
 \usage{
-pbdclient(addr = "localhost", port = 55555, prompt = "remoter")
+pbdclient(addr = "localhost", port = 55555, prompt = "remoter",
+  timer = FALSE)
 }
 \arguments{
-\item{addr, port, prompt}{See \code{?remoter::client}}
+\item{addr, port, prompt, timer}{See \code{?remoter::client}}
 }
 \description{
 Connect to a pbdR server (launch the client).
