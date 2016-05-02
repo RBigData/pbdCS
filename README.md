@@ -1,6 +1,6 @@
 # pbdCS 
 
-* **Version:** 0.1-1
+* **Version:** 0.2-0
 * **URL**: https://github.com/wrathematics/pbdCS
 * **License:** [![License](http://img.shields.io/badge/license-BSD%202--Clause-orange.svg?style=flat)](http://opensource.org/licenses/BSD-2-Clause)
 * **Author:** Drew Schmidt and Wei-Chen Chen

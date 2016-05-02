@@ -1,7 +1,7 @@
 Package: pbdCS
 Type: Package
 Title: 'pbdR' Client/Server Utilities
-Version: 0.1-1
+Version: 0.2-0
 Description: A set of utilities for interactively using the 'pbdR' set
     of packages.  By design, 'pbdR' uses the Single Program/Multiple Data
     or 'SPMD' paradigm, which is inherently batch (non-interactive).
