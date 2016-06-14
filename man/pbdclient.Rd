@@ -4,10 +4,14 @@
 \alias{pbdclient}
 \title{Client Launcher}
 \usage{
-pbdclient(addr = "localhost", port = 55555, prompt = "remoter")
+pbdclient(prompt = "pbdR", ...)
 }
 \arguments{
-\item{addr, port, prompt}{See \code{?remoter::client}}
+\item{prompt}{The prompt to display differentiating the pbd client
+from a basic R prompt.}
+
+\item{...}{Additional arguments passed to \code{remoter::client}.
+See \code{?remoter::client} for details.}
 }
 \description{
 Connect to a pbdR server (launch the client).

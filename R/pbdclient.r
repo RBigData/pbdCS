@@ -5,8 +5,12 @@
 #' @details
 #' An alias of the remoter client connecter function.
 #' 
-#' @param addr,port,prompt
-#' See \code{?remoter::client}
+#' @param prompt
+#' The prompt to display differentiating the pbd client
+#' from a basic R prompt.
+#' @param ...
+#' Additional arguments passed to \code{remoter::client}.
+#' See \code{?remoter::client} for details.
 #' 
 #' @export
-pbdclient <- remoter::client
+pbdclient <- function(prompt="pbdR", ...) remoter::client(prompt=prompt, ...)
