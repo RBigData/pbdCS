@@ -86,8 +86,8 @@ pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NUL
   rm("port", "password", "maxretry", "showmsg", "secure", "log", "verbose")
   invisible(gc())
   
-  eval(parse(text = "suppressMessages(library(remoter, quietly = TRUE))"), envir = globalenv())
-  eval(parse(text = "suppressMessages(library(pbdCS, quietly = TRUE))"), envir = globalenv())
+  eval(parse(text = "suppressMessages(library(remoter, quietly=TRUE))"), envir = globalenv())
+  eval(parse(text = "suppressMessages(library(pbdCS, quietly=TRUE))"), envir = globalenv())
   
   pbd_repl_server()
   pbdMPI::finalize()
