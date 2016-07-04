@@ -49,13 +49,10 @@
 #define IFF_LOOPBACK 0 // skip if undefined
 #endif
 
-#endif
-
 // hope they don't do something weird lol
-SEXP pbdcs_getip()
+SEXP pbdcs_getip_nix()
 {
   SEXP ip;
-  #if !OS_WINDOWS
   struct ifaddrs *tmp, *ifap;
   struct sockaddr_in *pAddr;
   char *addr;
@@ -71,8 +68,8 @@ SEXP pbdcs_getip()
       
       addr = inet_ntoa(pAddr->sin_addr);
       
-      if (strcmp(tmp->ifa_name, "lo") != 0  && 
-          strcmp(addr, LOCALHOST)     != 0  && 
+      if (strncmp(tmp->ifa_name, "lo", 2) != 0  && 
+          strncmp(addr, LOCALHOST, 4)     != 0  && 
           !(tmp->ifa_flags & IFF_LOOPBACK)  )
       {
         PROTECT(ip = allocVector(STRSXP, 1));
@@ -87,7 +84,21 @@ SEXP pbdcs_getip()
   }
   
   freeifaddrs(ifap);
-  #endif
   
   return R_NilValue;
+}
+#endif
+
+
+
+SEXP pbdcs_getip()
+{
+  SEXP ret;
+  #if OS_WINDOWS
+  ret = R_NilValue; // TODO
+  #else
+  ret = pbdcs_getip_nix();
+  #endif
+  
+  return ret;
 }
