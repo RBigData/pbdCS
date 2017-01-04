@@ -25,7 +25,8 @@ Suggests:
     pbdDMAT,
     pbdDEMO,
     knitr,
-    rmarkdown
+    rmarkdown,
+    pbdRPC
 VignetteBuilder: knitr
 NeedsCompilation: yes
 ByteCompile: yes
