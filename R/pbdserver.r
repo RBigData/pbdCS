@@ -173,7 +173,7 @@ pbd_get_remote_addr <- function()
     context <- zmq$Context()
     socket <- context$socket("ZMQ_REQ")
     socket$connect(address("localhost", .pbdenv$port))
-    socket$send(getip())
+    socket$send(ip_internal())
     socket$receive()
     socket$disconnect()
     rm(socket);rm(context)
@@ -193,7 +193,7 @@ pbd_init_server <- function()
   ### Order very much matters!
   if (comm.rank() == 0)
   {
-    serverip <- getip()
+    serverip <- ip_internal()
     bcast(serverip, rank.source=0)
     
     set(context, init.context())

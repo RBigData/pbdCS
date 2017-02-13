@@ -17,6 +17,7 @@ Imports:
     stats,
     utils,
     getPass (>= 0.1-0),
+    getip (>= 0.1-0),
     pbdMPI (>= 0.3-1),
     pbdZMQ (>= 0.2-2),
     remoter (>= 0.4-0)
@@ -25,7 +26,7 @@ Suggests:
     pbdDMAT,
     pbdDEMO,
     pbdRPC
-NeedsCompilation: yes
+NeedsCompilation: no
 ByteCompile: yes
 Authors@R: c(person("Drew", "Schmidt", role=c("aut", "cre"),
   email="wrathematics@gmail.com"),
