@@ -78,7 +78,7 @@ dirsep <- function()
 
 assert_mpi <- function(..., env = parent.frame())
 {
-  test <- tryCatch(assert_that(env=env, ...), error=identity)
+  test <- tryCatch(check(...), error=identity)
   if (!is.logical(test))
   {
     msg <- gsub(test, pattern="(^<assert|>$|Error: )", replacement="")

@@ -2,7 +2,6 @@
 #'
 #' @name pbdCS-package
 #' 
-#' @import assertthat
 #' @import pbdMPI
 #' @import remoter
 #' 

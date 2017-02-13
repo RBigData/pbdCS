@@ -45,7 +45,7 @@ pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NUL
   assert_mpi(port != remote_port)
   assert_mpi(is.string(bcaster))
   assert_mpi(is.null(password) || is.string(password))
-  assert_mpi(is.infinite(maxretry) || is.count(maxretry))
+  assert_mpi(is.posint(maxretry))
   assert_mpi(is.flag(secure))
   assert_mpi(is.flag(log))
   assert_mpi(is.flag(verbose))

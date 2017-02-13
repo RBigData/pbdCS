@@ -16,7 +16,6 @@ Depends:
 Imports:
     stats,
     utils,
-    assertthat (>= 0.1),
     pbdMPI (>= 0.3-1),
     pbdZMQ (>= 0.2-2),
     remoter (>= 0.3-2)
