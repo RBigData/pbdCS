@@ -1,0 +1,145 @@
+%\VignetteIndexEntry{Guide to the pbdCS Package}
+\documentclass[]{article}
+
+
+\input{./include/settings}
+
+
+\mytitle{Guide to the pbdCS Package}
+\mysubtitle{}
+\myversion{0.2-0}
+\myauthor{
+\centering
+Drew Schmidt \\ 
+\texttt{wrathematics@gmail.com} 
+}
+
+
+
+\begin{document}
+\makefirstfew
+
+
+
+
+\section{Introduction}\label{introduction}
+
+The \textbf{pbdCS} package \cite{pbdCS} is a set of utilities for
+interactively controlling batch, SPMD servers, such as those available
+in the \textbf{pbdR} \cite{pbdR2012} ecosystem of R packages.
+
+The spmd servers are derived from the \textbf{remoter}
+\cite{remoter} server, and the pbdclient is identically a
+\textbf{remoter} client. Communication is handled by \textbf{ZeroMQ}
+\cite{zeromq} via R package \textbf{pbdZMQ}
+\cite{Chen2015pbdZMQpackage}. Our use of pbdZMQ is specialized to
+client/server communications, but the package is very general. For more
+details about \textbf{pbdZMQ} see the \textbf{pbdZMQ} package vignette
+\cite{Chen2015pbdZMQvignette}.
+
+\subsection{Installation}\label{installation}
+
+You can install the stable version from CRAN using the usual
+\texttt{install.packages()}:
+
+\begin{lstlisting}[language=rr]
+install.packages"pbdCS")
+\end{lstlisting}
+
+The development version is maintained on GitHub, and can easily be
+installed by any of the packages that offer installations from GitHub:
+
+\begin{lstlisting}[language=rr]
+### Pick your preference
+devtools::install_github("RBigData/pbdCS")
+ghit::install_github("RBigData/pbdCS")
+remotes::install_github("RBigData/pbdCS")
+\end{lstlisting}
+
+
+
+\section{Using the pbdserver}\label{using-the-pbdserver}
+
+\subsection{Background}\label{background}
+
+\textbf{pbdCS} is heavily dependent on the \textbf{remoter} package. You
+are strongly encouraged to familiarize yourself with it before
+proceeding.
+
+To launch a pbdserver, you can use \texttt{pbdserver()} or
+\texttt{pbdSpawn()}. More information about each is provided below. Each
+function has several options which should look familiar to those
+familiar with \textbf{remoter}. The \texttt{password},
+\texttt{maxretry}, \texttt{secure}, \texttt{log}, \texttt{verbose}, and
+\texttt{showmsg} options are identical to those in
+\texttt{remoter::server}. There are several key differences in the
+pbdserver, however.
+
+First, there are two ports, \texttt{port} and \texttt{remote\_port}. The
+former is the port used for connections between rank 0 of the MPI ranks
+and the client. The latter is used if the default \texttt{bcaster} is
+used, namely \texttt{zmq}. If the other supported \texttt{bcaster} is
+used, namely \texttt{mpi}, then this argument is ignored.
+
+For more information, see the Implementation Details section below.
+
+
+\subsection{Launching}\label{launching}
+
+There are two ways to launch the servers: via \texttt{mpirun} from the
+shell, and via \texttt{pbdSpawn()} from R. To do the former, issue
+
+\begin{lstlisting}
+mpirun -np 2 Rscript -e "pbdserver()"
+\end{lstlisting}
+
+passing arguments to \texttt{pbdserver()} as usual. To launch from R
+directly:
+
+\begin{lstlisting}[language=rr]
+pbdSpawn()
+\end{lstlisting}
+
+To use \texttt{pbdSpawn()} from the terminal, do not combine with
+\texttt{mpirun}. Instead issue:
+
+\begin{lstlisting}
+Rscript -e "pbdSpawn()"
+\end{lstlisting}
+
+
+\subsection{Connecting}\label{connecting}
+
+Use \texttt{pbdCS::pbdclient()} or \texttt{remoter::client()} as when
+connecting to a \textbf{remoter} server.
+
+
+\section{Implementation Details}\label{implementation-details}
+
+When setting up the pbdservers, by default they will use ZeroMQ to
+communicate with each other. So when a client connects and begins
+issuing commands, those are propagated from rank 0 to the other ranks
+via a push/pull ZeroMQ socket. This can be changed to use MPI's
+\texttt{bcast()} by setting \texttt{bcaster=mpi} when setting up the
+pbdservers, but this is generally not recommended. The ZeroMQ method
+should be sufficiently fast, but it does not busy wait for commands,
+which is a serious advantage in the interactive environment.
+
+The above shows an example with a single input and its corresponding
+return return. Here, the user enters \texttt{allreduce(1)} from
+\textbf{pbdMPI}, which will use communication between the SPMD servers
+to return the total number of servers running. The client captures this
+input and passes it along to rank 0 of the SPMD servers. Then, using the
+push/pull sockets, the client's message is broadcast from rank 0 to all
+other SPMD servers. Finally, the command is evaluated, and the result
+from rank 0 is returned to the client. This pattern assumes that the
+\texttt{bcaster} method used when setting up the servers was ZeroMQ.
+
+
+
+
+\addcontentsline{toc}{section}{References}
+\bibliography{./include/pbdCS}
+\bibliographystyle{plain}
+
+\end{document}

@@ -23,8 +23,6 @@ Suggests:
     pbdBASE,
     pbdDMAT,
     pbdDEMO,
-    knitr,
-    rmarkdown,
     pbdRPC
 VignetteBuilder: knitr
 NeedsCompilation: yes
