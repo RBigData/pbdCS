@@ -16,6 +16,7 @@ kill <- function(pid)
 }
 
 
+
 checkpid <- function(pid)
 {
   os <- get.os()
@@ -53,15 +54,14 @@ is.int <- function(x)
 
 same.str <- function(str1, str2)
 {
-  return( tolower(str1) == tolower(str2) )
+  isTRUE(tolower(str1) == tolower(str2))
 }
 
 
 
 get.os <- function()
 {
-  ret <- Sys.info()["sysname"]
-  return( ret )
+  Sys.info()["sysname"]
 }
 
 
