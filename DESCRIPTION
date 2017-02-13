@@ -24,7 +24,6 @@ Suggests:
     pbdDMAT,
     pbdDEMO,
     pbdRPC
-VignetteBuilder: knitr
 NeedsCompilation: yes
 ByteCompile: yes
 Authors@R: c(person("Drew", "Schmidt", role=c("aut", "cre"),
