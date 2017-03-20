@@ -7,6 +7,13 @@
 #' data is not shared between the calling R process and the batch processes
 #' which execute the 'body' source.
 #' 
+#' @details
+#' This is a simple wrapper around a system call to mpirun on the
+#' input script.
+#' 
+#' Temp needs to be a file that the client and all servers can
+#' read from.
+#' 
 #' @param body 
 #' character; the pbdR script to be evaluated.
 #' @param mpicmd
@@ -29,13 +36,6 @@
 #' @param temp
 #' A temporary file path that is accessible to all nodes, including
 #' the client.  See details for a full explanation.
-#'
-#' @details
-#' This is a simple wrapper around a system call to mpirun on the
-#' input script.
-#' 
-#' Temp needs to be a file that the client and all servers can
-#' read from.
 #' 
 #' @export
 pbdRscript <- function(body, mpicmd="mpirun", nranks=1, auto=TRUE, auto.dmat=FALSE, pid=TRUE, wait=TRUE, temp=tempfile())

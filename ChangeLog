@@ -1,6 +1,8 @@
 Release 0.2-0:
   * Rewrite vignette.
   * Fix environment bug (WCC).
+  * Drop assertthat for reactor.
+  * Switch to LaTeX vignette.
 
 Release 0.1-1:
   * Switch to depending on remoter.

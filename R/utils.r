@@ -16,6 +16,7 @@ kill <- function(pid)
 }
 
 
+
 checkpid <- function(pid)
 {
   os <- get.os()
@@ -53,15 +54,14 @@ is.int <- function(x)
 
 same.str <- function(str1, str2)
 {
-  return( tolower(str1) == tolower(str2) )
+  isTRUE(tolower(str1) == tolower(str2))
 }
 
 
 
 get.os <- function()
 {
-  ret <- Sys.info()["sysname"]
-  return( ret )
+  Sys.info()["sysname"]
 }
 
 
@@ -78,7 +78,7 @@ dirsep <- function()
 
 assert_mpi <- function(..., env = parent.frame())
 {
-  test <- tryCatch(assert_that(env=env, ...), error=identity)
+  test <- tryCatch(check(...), error=identity)
   if (!is.logical(test))
   {
     msg <- gsub(test, pattern="(^<assert|>$|Error: )", replacement="")
