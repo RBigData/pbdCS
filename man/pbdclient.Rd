@@ -17,6 +17,6 @@ See \code{?remoter::client} for details.}
 Connect to a pbdR server (launch the client).
 }
 \details{
-An alias of the remoter client connecter function.
+An alias of the remoter function \code{client()}.
 }
 

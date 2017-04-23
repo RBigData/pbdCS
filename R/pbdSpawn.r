@@ -60,7 +60,7 @@
 #' 
 #' @seealso \code{\link{pbdRscript}}
 #' @export
-# port=55555, remote_port=55556, bcaster="zmq", password=NULL, maxretry=5, secure=has.sodium(), log=TRUE, verbose=FALSE, showmsg=FALSE)
+# port=55555, remote_port=55556, bcaster="zmq", password=NULL, maxretry=5, secure=has.sodium(), log=TRUE, verbose=FALSE, showmsg=FALSE
 pbdSpawn <- function(nranks=2, mpicmd="mpirun", bcaster="zmq", port="random", auto.dmat=FALSE)
 {
   if (is.character(port))

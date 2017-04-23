@@ -16,19 +16,17 @@ Depends:
 Imports:
     stats,
     utils,
-    assertthat (>= 0.1),
+    getPass (>= 0.1-0),
+    getip (>= 0.1-0),
     pbdMPI (>= 0.3-1),
     pbdZMQ (>= 0.2-2),
-    remoter (>= 0.3-2)
+    remoter (>= 0.4-0)
 Suggests:
     pbdBASE,
     pbdDMAT,
     pbdDEMO,
-    knitr,
-    rmarkdown,
     pbdRPC
-VignetteBuilder: knitr
-NeedsCompilation: yes
+NeedsCompilation: no
 ByteCompile: yes
 Authors@R: c(person("Drew", "Schmidt", role=c("aut", "cre"),
   email="wrathematics@gmail.com"),
