@@ -40,7 +40,10 @@ pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NUL
   if (comm.rank() != 0)
     password <- NULL # don't want to run getPass() on other ranks
   
-  validate_port(port)
+  if (length(port) == 1 && port == 0)
+    
+  
+  validate_port(port, WARN=TRUE)
   validate_port(remote_port)
   assert_mpi(port != remote_port)
   assert_mpi(is.string(bcaster))
@@ -71,7 +74,7 @@ pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NUL
   set(bcast_method, bcaster)
   set(port, port)
   set(remote_port, remote_port)
-  set(password, password)
+  set(password, pwhash(password))
   set(secure, secure)
   set(kill_interactive_server, FALSE)
   
@@ -82,6 +85,12 @@ pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NUL
     set(logfile, logfile_init())
   
   mpilogprint(paste("*** Launching", ifelse(getval(secure), "secure", "UNSECURE"), "pbdR server ***"), preprint="\n\n")
+  ### TODO
+  # ips <- remoter_getips()
+  # logprint(paste("                           Internal IP: ", ips$ip_in), timestamp=FALSE)
+  # logprint(paste("                           External IP: ", ips$ip_ex), timestamp=FALSE)
+  mpilogprint(paste("                           Port:        ", port), timestamp=FALSE)
+
   
   rm("port", "password", "maxretry", "showmsg", "secure", "log", "verbose")
   invisible(gc())
@@ -196,9 +205,9 @@ pbd_init_server <- function()
     serverip <- getip("internal")
     bcast(serverip, rank.source=0)
     
-    set(context, init.context())
-    set(socket, init.socket(getval(context), "ZMQ_REP"))
-    bind.socket(getval(socket), address("*", getval(port)))
+    set(context, pbdZMQ::init.context())
+    set(socket, pbdZMQ::init.socket(getval(context), "ZMQ_REP"))
+    pbdZMQ::bind.socket(getval(socket), address("*", getval(port)))
   }
   else
     serverip <- bcast()
@@ -209,16 +218,16 @@ pbd_init_server <- function()
     if (comm.rank() == 0)
     {
       ### rank 0 setup for talking to other ranks
-      set(remote_context, init.context())
-      set(remote_socket, init.socket(getval(remote_context), "ZMQ_PUSH"))
-      bind.socket(getval(remote_socket), address("*", getval(remote_port)))
+      set(remote_context, pbdZMQ::init.context())
+      set(remote_socket, pbdZMQ::init.socket(getval(remote_context), "ZMQ_PUSH"))
+      pbdZMQ::bind.socket(getval(remote_socket), address("*", getval(remote_port)))
     }
     else
     {
       ### other ranks
-      set(remote_context, init.context())
-      set(remote_socket, init.socket(getval(remote_context), "ZMQ_PULL"))
-      connect.socket(getval(remote_socket), address(serverip, getval(remote_port)))
+      set(remote_context, pbdZMQ::init.context())
+      set(remote_socket, pbdZMQ::init.socket(getval(remote_context), "ZMQ_PULL"))
+      pbdZMQ::connect.socket(getval(remote_socket), address(serverip, getval(remote_port)))
     }
   }
   

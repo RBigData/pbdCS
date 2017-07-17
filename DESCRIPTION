@@ -14,17 +14,17 @@ License: BSD 2-clause License + file LICENSE
 Depends:
     R (>= 3.0.0)
 Imports:
-    stats,
     utils,
     getPass (>= 0.1-0),
     getip (>= 0.1-0),
+    argon2 (>= 0.2-0),
     pbdMPI (>= 0.3-1),
     pbdZMQ (>= 0.2-2),
     remoter (>= 0.4-0)
 Suggests:
-    pbdBASE,
     pbdDMAT,
     pbdDEMO,
+    kazaam,
     pbdRPC
 NeedsCompilation: no
 ByteCompile: yes

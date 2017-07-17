@@ -1,13 +1,13 @@
 send_remote <- function(data, send.more=FALSE)
 {
-  send.socket(getval(remote_socket), data=data, send.more=send.more)
+  pbdZMQ::send.socket(getval(remote_socket), data=data, send.more=send.more)
 }
 
 
 
 receive_remote <- function()
 {
-  receive.socket(getval(remote_socket))
+  pbdZMQ::receive.socket(getval(remote_socket))
 }
 
 

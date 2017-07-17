@@ -20,6 +20,8 @@ getval <- eval(parse(text = "remoter:::getval"))
 get.status <- eval(parse(text = "remoter:::get.status"))
 set.status <- eval(parse(text = "remoter:::set.status"))
 
+pwhash <- eval(parse(text = "remoter:::pwhash"))
+pwcheck <- eval(parse(text = "remoter:::pwcheck"))
 
 remoter_warning <- eval(parse(text = "remoter:::remoter_warning"))
 remoter_error <- eval(parse(text = "remoter:::remoter_error"))

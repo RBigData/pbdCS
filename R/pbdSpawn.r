@@ -66,7 +66,7 @@ pbdSpawn <- function(nranks=2, mpicmd="mpirun", bcaster="zmq", port="random", au
   if (is.character(port))
   {
     if (port == "random")
-      port <- random_port()
+      port <- pbdZMQ::random_port()
   }
   else
     stop("")
