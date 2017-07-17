@@ -30,10 +30,10 @@ validate_port <- eval(parse(text = "remoter:::validate_port"))
 
 logfile_init <- eval(parse(text = "remoter:::logfile_init"))
 logprint <- eval(parse(text = "remoter:::logprint"))
-mpilogprint <- function(msg, checkverbose=FALSE, checkshowmsg=FALSE, preprint="", level="")
+mpilogprint <- function(msg, checkverbose=FALSE, checkshowmsg=FALSE, preprint="", level="", timestamp=TRUE)
 {
   if (comm.rank() == 0)
-    logprint(msg, checkverbose, checkshowmsg, preprint, level)
+    logprint(msg, checkverbose, checkshowmsg, preprint, level, timestamp)
 }
 
 remoter_send <- eval(parse(text = "remoter:::remoter_send"))

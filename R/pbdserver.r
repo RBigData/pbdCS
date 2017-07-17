@@ -43,7 +43,7 @@ pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NUL
   if (length(port) == 1 && port == 0)
     
   
-  validate_port(port, WARN=TRUE)
+  validate_port(port)
   validate_port(remote_port)
   assert_mpi(port != remote_port)
   assert_mpi(is.string(bcaster))
@@ -171,25 +171,6 @@ pbd_server_eval <- function(input, whoami, env)
     
     remoter_send(getval(status))
   }
-}
-
-
-
-pbd_get_remote_addr <- function()
-{
-  if (comm.rank() == 0)
-  {
-    context <- zmq$Context()
-    socket <- context$socket("ZMQ_REQ")
-    socket$connect(address("localhost", .pbdenv$port))
-    socket$send(getip("internal"))
-    socket$receive()
-    socket$disconnect()
-    rm(socket);rm(context)
-    invisible(gc())
-  }
-  
-  invisible()
 }
 
 
