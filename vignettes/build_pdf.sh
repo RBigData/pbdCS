@@ -19,11 +19,15 @@ buildVignette(){
   Rscript -e "tools::compactPDF('$1', gs_quality='ebook')"
 }
 
+publish(){
+  mv -f *.pdf ../inst/doc/
+  cp -f *.Rnw ../inst/doc/
+}
+
+
 
 cleanVignette
 buildVignette pbdCS.Rnw
 cleanVignette
 
-
-mv -f *.pdf ../inst/doc/
-cp -f *.Rnw ../inst/doc/
+publish
