@@ -11,4 +11,3 @@ pbdR Client/Server Utilities
 Drew Schmidt and Wei-Chen Chen
 }
 \keyword{package}
-
