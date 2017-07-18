@@ -6,9 +6,7 @@
 #' @import remoter
 #' @importFrom getPass getPass
 #' @importFrom getip getip
-#' @importFrom pbdZMQ zmq send.socket receive.socket init.socket
-#'   init.context bind.socket connect.socket address random_port
-#' @importFrom stats runif
+#' @importFrom pbdZMQ address
 #' @importFrom utils capture.output globalVariables
 #'
 #' @docType package

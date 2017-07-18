@@ -24,9 +24,9 @@ Drew Schmidt \\
 
 \section{Introduction}\label{introduction}
 
-The \textbf{pbdCS} package \cite{pbdCS} is a set of utilities for
+The \textbf{pbdCS} package~\cite{pbdCS} is a set of utilities for
 interactively controlling batch, SPMD servers, such as those available
-in the \textbf{pbdR} \cite{pbdR2012} ecosystem of R packages.
+in the \textbf{pbdR}~\cite{pbdR2012} ecosystem of R packages.
 
 The spmd servers are derived from the \textbf{remoter}
 \cite{remoter} server, and the pbdclient is identically a

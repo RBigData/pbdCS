@@ -19,4 +19,3 @@ Connect to a pbdR server (launch the client).
 \details{
 An alias of the remoter function \code{client()}.
 }
-
