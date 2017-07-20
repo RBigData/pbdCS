@@ -1,9 +1,10 @@
 # pbdCS 
 
 * **Version:** 0.2-0
-* **URL**: https://github.com/wrathematics/pbdCS
 * **License:** [![License](http://img.shields.io/badge/license-BSD%202--Clause-orange.svg?style=flat)](http://opensource.org/licenses/BSD-2-Clause)
 * **Author:** Drew Schmidt and Wei-Chen Chen
+* **Project home**: https://github.com/RBigData/pbdCS
+* **Bug reports**: https://github.com/RBigData/pbdCS/issues
 
 A client/server framework for the pbdR packages. The client is actually the same as the client from the **remoter** package.
 
