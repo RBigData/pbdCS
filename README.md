@@ -11,18 +11,29 @@ A client/server framework for the pbdR packages. The client is actually the same
 
 ## Installation
 
-#### Stable Version
+<!-- You can install the stable version from CRAN using the usual `install.packages()`:
+
 ```r
 install.packages("pbdCS")
 ```
 
-#### Development Version
+In order to be able to create and connect to secure servers, you need to also install the **sodium** package.  The use of **sodium** is optional because it is a non-trivial systems dependency, but it is highly recommended.  You can install it manually with a call to `install.packages("sodium")` or by installing **remoter** via:
+
+```r
+install.packages("pbdCS", dependencies=TRUE)
+``` -->
+
+The development version is maintained on GitHub, and can easily be installed by any of the packages that offer installations from GitHub:
+
 ```r
 ### Pick your preference
 devtools::install_github("RBigData/pbdCS")
 ghit::install_github("RBigData/pbdCS")
 remotes::install_github("RBigData/pbdCS")
 ```
+
+To simplify installations on cloud systems, we also have a [Docker container](https://github.com/RBigData/pbdr-cs) available.
+
 
 
 
