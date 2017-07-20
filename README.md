@@ -1,7 +1,7 @@
 # pbdCS 
 
 * **Version:** 0.2-0
-* **License:** [![License](http://img.shields.io/badge/license-BSD%202--Clause-orange.svg?style=flat)](http://opensource.org/licenses/BSD-2-Clause)
+* **License:** [BSD 2-Clause](http://opensource.org/licenses/BSD-2-Clause)
 * **Author:** Drew Schmidt and Wei-Chen Chen
 * **Project home**: https://github.com/RBigData/pbdCS
 * **Bug reports**: https://github.com/RBigData/pbdCS/issues
