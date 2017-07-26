@@ -1,13 +1,14 @@
 Release 0.2-0:
-  * Rewrite vignette.
-  * Fix environment bug (WCC).
-  * Drop assertthat for reactor.
-  * Switch to LaTeX vignette.
+  * Rewrote vignette.
+  * Fixed environment bug (WCC).
+  * Dropped assertthat for reactor.
+  * Switched to LaTeX vignette.
+  * Fixed comm.print().
 
 Release 0.1-1:
-  * Switch to depending on remoter.
-  * add pbdserver().
-  * Fix getPass() bug on pbdserver().
+  * Switched to depending on remoter.
+  * Added pbdserver().
+  * Fixed getPass() bug on pbdserver().
 
 Release 0.1-0:
   * Added vignette.
