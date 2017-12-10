@@ -84,6 +84,10 @@ pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NUL
   if (log)
     set(logfile, logfile_init())
   
+  
+  eval(parse(text = "suppressMessages(library(pbdCS, quietly = TRUE))"), envir = globalenv()) 
+
+  
   mpilogprint(paste("*** Launching", ifelse(getval(secure), "secure", "UNSECURE"), "pbdR server ***"), preprint="\n\n")
   ### TODO
   # ips <- remoter_getips()
@@ -147,14 +151,18 @@ pbd_server_eval <- function(input, whoami, env)
   
   # TODO
   # msg <- pbd_eval_filter_server(msg=msg)
-  
-  ret <- 
-  withCallingHandlers(
-    tryCatch({
-        withVisible(eval(parse(text=msg), envir=env))
-      }, error=remoter_error
-    ), warning=remoter_warning
-  )
+  additionmsg <- 
+  capture.output({
+    sink(file = stdout(), type = "message")
+    ret <- 
+    withCallingHandlers(
+      tryCatch({
+          withVisible(eval(parse(text=msg), envir=env))
+        }, error=remoter_error
+      ), warning=remoter_warning
+    )
+    sink(file = NULL, type = "message")
+  })
   
   
   if (comm.rank() == 0)
@@ -167,6 +175,17 @@ pbd_server_eval <- function(input, whoami, env)
         set.status(ret, NULL)
       else
         set.status(ret, utils::capture.output(ret$value))
+    }
+    
+    ### Take care the `R output` from cat/print/message
+    if (length(additionmsg) == 0)
+      set.status(ret_addition, NULL)
+    else 
+    {
+      set.status(ret_addition, additionmsg)
+      ### Print to server if needed for debugging
+      if (getval(verbose))
+        cat(additionmsg, sep = "\n")
     }
     
     remoter_send(getval(status))
