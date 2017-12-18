@@ -4,6 +4,7 @@ Release 0.2-0:
   * Dropped assertthat for reactor.
   * Switched to LaTeX vignette.
   * Fixed comm.print().
+  * Disable auto_rpng_off problem.
 
 Release 0.1-1:
   * Switched to depending on remoter.
