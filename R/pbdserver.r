@@ -30,12 +30,16 @@
 #' Logical; enables the verbose logger.
 #' @param showmsg
 #' Logical; if TRUE, messages from the client are logged
+#' @param userpng
+#' Logical; if TRUE, rpng is set as the default device for displaying. This is
+#' currently disabled because it is implemented for rank 0 and experimentaly for
+#' other ranks.
 #' 
 #' @return
 #' Returns \code{TRUE} invisibly on successful exit.
 #' 
 #' @export
-pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NULL, maxretry=5, secure=has.sodium(), log=TRUE, verbose=FALSE, showmsg=FALSE)
+pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NULL, maxretry=5, secure=has.sodium(), log=TRUE, verbose=FALSE, showmsg=FALSE, userpng=FALSE)
 {
   if (comm.rank() != 0)
     password <- NULL # don't want to run getPass() on other ranks
@@ -53,6 +57,7 @@ pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NUL
   assert_mpi(is.flag(log))
   assert_mpi(is.flag(verbose))
   assert_mpi(is.flag(showmsg))
+  assert_mpi(is.flag(userpng))
   
   comm.match.arg(tolower(bcaster), c("zmq", "mpi"))
   
@@ -84,6 +89,12 @@ pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NUL
   if (log)
     set(logfile, logfile_init())
   
+  ### TODO: Need rank 0 uses rpng, but not others before turn on below!
+  ### Backup default device and set the rpng as a defult opening device.
+  # options(device.default = getOption("device"))
+  # if (userpng)
+  #   options(device = remoter::rpng)
+
   
   eval(parse(text = "suppressMessages(library(pbdCS, quietly = TRUE))"), envir = globalenv()) 
 
@@ -96,7 +107,7 @@ pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NUL
   mpilogprint(paste("                           Port:        ", port), timestamp=FALSE)
 
   
-  rm("port", "password", "maxretry", "showmsg", "secure", "log", "verbose")
+  rm("port", "password", "maxretry", "showmsg", "secure", "log", "verbose", "userpng")
   invisible(gc())
   
   eval(parse(text = "suppressMessages(library(remoter, quietly=TRUE))"), envir = globalenv())
@@ -123,6 +134,8 @@ pbd_server_eval <- function(input, whoami, env)
 {
   set.status(continuation, FALSE)
   set.status(lasterror, NULL)
+  ### Turn OFF here because dev.off was hijacked by remoter::rpng.off.
+  set.status(need_auto_rpng_off, FALSE)
   
   if (comm.rank() == 0)
   {
@@ -163,31 +176,35 @@ pbd_server_eval <- function(input, whoami, env)
     )
     sink(file = NULL, type = "message")
   })
-  
-  
+
+
+  ### Take care the `R output` from ret.
+  if (!is.null(ret))
+  {
+    set.status(visible, ret$visible)
+      
+    if (!ret$visible)
+      set.status(ret, NULL)
+    else
+      set.status(ret, utils::capture.output(ret$value))
+
+    ### TODO: Copy rpng part of remoter_server_eval() to here.
+  }
+    
+  ### Take care the `R output` from cat/print/message
+  if (length(additionmsg) == 0)
+    set.status(ret_addition, NULL)
+  else 
+  {
+    set.status(ret_addition, additionmsg)
+    ### Print to server if needed for debugging
+    if (getval(verbose))
+      cat(additionmsg, sep = "\n")
+  }
+    
   if (comm.rank() == 0)
   {
-    if (!is.null(ret))
-    {
-      set.status(visible, ret$visible)
-      
-      if (!ret$visible)
-        set.status(ret, NULL)
-      else
-        set.status(ret, utils::capture.output(ret$value))
-    }
-    
-    ### Take care the `R output` from cat/print/message
-    if (length(additionmsg) == 0)
-      set.status(ret_addition, NULL)
-    else 
-    {
-      set.status(ret_addition, additionmsg)
-      ### Print to server if needed for debugging
-      if (getval(verbose))
-        cat(additionmsg, sep = "\n")
-    }
-    
+    ### TODO: May need more works/checks?
     remoter_send(getval(status))
   }
 }
