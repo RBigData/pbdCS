@@ -1,6 +1,6 @@
 # pbdCS 
 
-* **Version:** 0.2-0
+* **Version:** 0.2-1
 * **License:** [BSD 2-Clause](http://opensource.org/licenses/BSD-2-Clause)
 * **Author:** Drew Schmidt and Wei-Chen Chen
 * **Project home**: https://github.com/RBigData/pbdCS
