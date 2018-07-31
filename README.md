@@ -26,9 +26,6 @@ install.packages("pbdCS", dependencies=TRUE)
 The development version is maintained on GitHub, and can easily be installed by any of the packages that offer installations from GitHub:
 
 ```r
-### Pick your preference
-devtools::install_github("RBigData/pbdCS")
-ghit::install_github("RBigData/pbdCS")
 remotes::install_github("RBigData/pbdCS")
 ```
 
