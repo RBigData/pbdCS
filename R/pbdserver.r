@@ -132,6 +132,7 @@ pbdserver <- function(port=55555, remote_port=55556, bcaster="zmq", password=NUL
 
 pbd_server_eval <- function(input, whoami, env)
 {
+  set.status(shouldwarn, FALSE)
   set.status(continuation, FALSE)
   set.status(lasterror, NULL)
   ### Turn OFF here because dev.off was hijacked by remoter::rpng.off.
